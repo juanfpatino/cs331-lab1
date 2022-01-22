@@ -24,16 +24,16 @@ public class lab1 {
     private static void ConfigElevation(Double[][] elevation, Scanner s) {
         for(int i = 0; i < 500; i++){
 
-            String[] line = s.nextLine().split(" ");
+            String[] line = s.nextLine().trim().split("\\s+");
             for(int j = 0; j < 395; j++){
 
                 String valAsString = line[j].substring(0, 8);
 
                 //remove the e+02 at the end then multiply by 100
 
-                double val = Double.parseDouble(valAsString);//primative?
+                double val = 100.0*Double.parseDouble(valAsString);//primative?
 
-                elevation[i][j] = val;
+                elevation[j][i] = val;
 
             }
 
