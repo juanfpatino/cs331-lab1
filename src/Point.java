@@ -20,7 +20,6 @@ public class Point {
 
     public void setColor(int d){
 
-        // Components will be in the range of 0..255:
         int blue = d & 0xff;
         int green = (d & 0xff00) >> 8;
         int red = (d & 0xff0000) >> 16;
