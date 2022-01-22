@@ -1,5 +1,8 @@
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.Scanner;
 import java.math.*;
@@ -19,6 +22,36 @@ public class lab1 {
 
         ConfigElevation(elevation, s);
 
+        ArrayList<Point> path = new ArrayList<>();
+        s = new Scanner(pathFile);
+
+        ConfigPath(s, path);
+
+
+
+    }
+
+    private static void ConfigPath(Scanner s, ArrayList<Point> path) {
+        String ss = s.nextLine();
+
+        while(true){
+
+            String xString = ss.split("\\s+")[0];
+            String yString = ss.split("\\s+")[1];
+            Point p = new Point(Integer.parseInt(xString), Integer.parseInt(yString));
+            path.add(p);
+
+            try{
+
+                ss = s.nextLine();
+
+            }catch (NoSuchElementException n){
+
+                break;
+
+            }
+
+        }
     }
 
     private static void ConfigElevation(Double[][] elevation, Scanner s) {
