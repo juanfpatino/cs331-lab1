@@ -32,7 +32,14 @@ public class lab1 {
         ConfigPath(s, path);
 
         Point[] G = new Point[197500];
+        ConfigGraph(terrain, elevation, G);
 
+        //TODO: A*
+
+
+    }
+
+    private static void ConfigGraph(BufferedImage terrain, Double[][] elevation, Point[] G) {
         int count = 0;
 
         for(int i = 0; i < terrain.getWidth(); i++){
@@ -50,9 +57,6 @@ public class lab1 {
             }
 
         }
-
-        //int o = 1;
-
     }
 
     private static void ConfigPath(Scanner s, ArrayList<Point> path) {
