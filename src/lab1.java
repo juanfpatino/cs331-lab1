@@ -8,6 +8,10 @@ import java.util.Scanner;
 import java.math.*;
 import java.io.*;
 
+//Juan Francisco Patino
+
+//h(n) will be a number averaged by the difference in elevation from g(n) and a number derived from the difficulty of the terrain
+
 public class lab1 {
 
     public static void main(String[] args)throws IOException {//terrain.png, mpp.txt, redOut.png
@@ -27,7 +31,27 @@ public class lab1 {
 
         ConfigPath(s, path);
 
+        Point[] G = new Point[197500];
 
+        int count = 0;
+
+        for(int i = 0; i < terrain.getWidth(); i++){
+
+            for(int j = 0; j < terrain.getHeight(); j++){
+
+                Point p = new Point(i, j);
+                p.setElevation(elevation[i][j]);
+                int c = terrain.getRGB(i,j);
+                p.setColor(c);
+
+                G[count] = p;
+                count++;
+
+            }
+
+        }
+
+        //int o = 1;
 
     }
 
