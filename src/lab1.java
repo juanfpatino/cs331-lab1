@@ -36,6 +36,8 @@ public class lab1 {
 
         //TODO: A*
 
+        System.out.println("hi");
+
 
     }
 

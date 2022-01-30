@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 public class Point {
 
     public int x;
@@ -9,6 +11,23 @@ public class Point {
 
         this.x = x;
         this.y = y;
+
+    }
+
+    public Point[] getNeighbors(){//returns coordinates* of neighbors. algorithm will ignore negative
+
+        Point[] p = new Point[8];
+
+        p[0] = new Point(x-1, y-1);
+        p[1] = new Point(x, y-1);
+        p[2] = new Point(x+1, y);
+        p[3] = new Point(x-1, y);
+        p[4] = new Point(x+1, y);
+        p[5] = new Point(x-1, y+1);
+        p[6] = new Point(x, y+1);
+        p[7] = new Point(x+1, y+1);
+
+        return p;
 
     }
 
