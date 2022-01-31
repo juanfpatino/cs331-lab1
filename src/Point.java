@@ -207,10 +207,18 @@ public class Point implements Comparable<Point> {
         return Objects.hash(x, y);
     }
 
+
     @Override
     public int compareTo(Point o) {
-        return (int)f;
+        if(this.f < o.f){
+
+            return 1;
+
+        }else if(this.f > o.f){
+
+            return -1;
+
+        }
+        return 0;
     }
-
-
 }
