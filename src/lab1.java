@@ -33,16 +33,51 @@ public class lab1 {
 
         //TODO: A*
 
-        Point starting = path.poll();
+        Point current = path.poll();
+
+        Queue<Point> frontier = new PriorityQueue<>();
+        ArrayList<Point> explored = new ArrayList<>();
+
+        explored.add(current);
+
+        Point next = path.poll();
 
         while(!path.isEmpty()){
 
-            Point next = path.poll();
+            assert current != null;
+            if(current.equals(next))
+                next = path.poll();
 
+            Point[] children = current.getNeighbors();
 
+            for (Point c: children
+                 ) {
+
+                if(c == null) continue;
+
+                c.setColor(terrain.getRGB(c.x, c.y)); //terrain level is set here
+
+                assert next != null;
+
+                double distance = Math.sqrt(Math.pow(next.x - current.x, 2) + Math.pow(next.y - current.y, 2) + Math.pow(next.elevation - current.elevation, 2));
+                //TODO ^ make this neater for debugging
+                double h = distance * current.getTerrainLevel();
+                c.setF(h + distance);
+                if(!explored.contains(c))
+                frontier.add(c);
+
+            }
+
+            current = frontier.poll(); //take off frontier
+            explored.add(current); //add it to explored set
+            assert current != null;
+            terrain.setRGB(current.x, current.y, 0xFF0000);
 
         }
 
+        //out png
+        File outputFile = new File(outFileName);
+        ImageIO.write(terrain, "png", outputFile);
 
     }
 

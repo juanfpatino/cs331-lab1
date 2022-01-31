@@ -1,3 +1,5 @@
+import java.util.Objects;
+
 public class Point implements Comparable<Point> {
 
     public int x;
@@ -5,6 +7,7 @@ public class Point implements Comparable<Point> {
     public double elevation;
     private Color color;
     private double terrainLevel;
+    private double f;
 
     public Point(int x, int y){
 
@@ -18,16 +21,60 @@ public class Point implements Comparable<Point> {
         Point[] p = new Point[8];
 
         p[0] = new Point(x-1, y-1);
+        if(x == 0 || y == 0){
+
+            p[0] = null;    //these are to prevent out of bounds
+
+        }
         p[1] = new Point(x, y-1);
-        p[2] = new Point(x+1, y);
+        if(y == 0){
+
+            p[1] = null;
+
+        }
+        p[2] = new Point(x+1, y-1);
+        if(x > 394 || y == 0){
+
+            p[2] = null;
+
+        }
         p[3] = new Point(x-1, y);
+        if(x == 0){
+
+            p[3] = null;
+
+        }
         p[4] = new Point(x+1, y);
+        if(x > 394){
+
+            p[4] = null;
+
+        }
         p[5] = new Point(x-1, y+1);
+        if(x == 0 || y > 499){
+
+            p[5] = null;
+
+        }
         p[6] = new Point(x, y+1);
+        if(y > 499){
+
+            p[6] = null;
+
+        }
         p[7] = new Point(x+1, y+1);
+        if(x > 394 || y > 499){
+
+            p[7] = null;
+
+        }
 
         return p;
 
+    }
+
+    public void setF(double f) {
+        this.f = f;
     }
 
     public void setElevation(double d){
@@ -51,7 +98,7 @@ public class Point implements Comparable<Point> {
 
         if(this.color.equals(new Color(248, 148, 18))){
 
-            return 0.0;// Open land
+            return 0.1;// Open land
 
         }else if(this.color.equals(new Color(255, 192, 0))){
 
@@ -79,11 +126,11 @@ public class Point implements Comparable<Point> {
 
         }else if(this.color.equals(new Color(71, 51, 3))){
 
-            return 0.0;//Paved road
+            return 0.1;//Paved road
 
         }else if(this.color.equals(new Color(0, 0, 0))){
 
-            return 0.0;//Footpath
+            return 0.1;//Footpath
 
         }else {
 
@@ -106,8 +153,21 @@ public class Point implements Comparable<Point> {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Point point = (Point) o;
+        return x == point.x && y == point.y;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(x, y);
+    }
+
+    @Override
     public int compareTo(Point o) {
-        return 0;
+        return (int)f;
     }
 
 
