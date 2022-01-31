@@ -7,7 +7,9 @@ public class Point implements Comparable<Point> {
     public double elevation;
     private Color color;
     private double terrainLevel;
+
     private double f;
+    private int g = 0;
 
     public Point(int x, int y){
 
@@ -20,52 +22,84 @@ public class Point implements Comparable<Point> {
 
         Point[] p = new Point[8];
 
-        p[0] = new Point(x-1, y-1);
         if(x == 0 || y == 0){
 
             p[0] = null;    //these are to prevent out of bounds
 
         }
-        p[1] = new Point(x, y-1);
+        else{
+
+            p[0] = new Point(x-1, y-1);
+
+        }
         if(y == 0){
 
             p[1] = null;
 
         }
-        p[2] = new Point(x+1, y-1);
-        if(x > 394 || y == 0){
+        else{
+
+            p[1] = new Point(x, y-1);
+
+        }
+        if(x >= 394 || y == 0){
 
             p[2] = null;
 
         }
-        p[3] = new Point(x-1, y);
+        else{
+
+            p[2] = new Point(x+1, y-1);
+
+        }
         if(x == 0){
 
             p[3] = null;
 
         }
-        p[4] = new Point(x+1, y);
-        if(x > 394){
+        else{
+
+            p[3] = new Point(x-1, y);
+
+        }
+        if(x >= 394){
 
             p[4] = null;
 
         }
-        p[5] = new Point(x-1, y+1);
-        if(x == 0 || y > 499){
+        else{
+
+            p[4] = new Point(x+1, y);
+
+        }
+        if(x == 0 || y >= 499){
 
             p[5] = null;
 
         }
-        p[6] = new Point(x, y+1);
-        if(y > 499){
+        else{
+
+            p[5] = new Point(x-1, y+1);
+
+        }
+        if(y >= 499){
 
             p[6] = null;
 
         }
-        p[7] = new Point(x+1, y+1);
-        if(x > 394 || y > 499){
+        else{
+
+            p[6] = new Point(x, y+1);
+
+        }
+        if(x >= 394 || y >= 499){
 
             p[7] = null;
+
+        }
+        else{
+
+            p[7] = new Point(x+1, y+1);
 
         }
 
@@ -75,6 +109,14 @@ public class Point implements Comparable<Point> {
 
     public void setF(double f) {
         this.f = f;
+    }
+
+    public void setG(int g) {
+        this.g = g;
+    }
+
+    public int getG() {
+        return g;
     }
 
     public void setElevation(double d){
@@ -118,7 +160,7 @@ public class Point implements Comparable<Point> {
 
         }else if(this.color.equals(new Color(5, 73, 24))){
 
-            return 10.0;//Impassable vegetation
+            return 999.9;//Impassable vegetation
 
         }else if(this.color.equals(new Color(0, 0, 255))){
 

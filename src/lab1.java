@@ -23,47 +23,58 @@ public class lab1 {
 
         ConfigElevation(elevation, s);
 
-        Queue<Point> path = new PriorityQueue<>();
+        ArrayList<Point> path = new ArrayList<>();
         s = new Scanner(pathFile);
 
-        ConfigPath(s, path, terrain);
+        ConfigPath(s, path, terrain, elevation);
 
         Point[] G = new Point[197500];
         ConfigGraph(terrain, elevation, G);
 
-        //TODO: A*
+        //A*
 
-        Point current = path.poll();
+        Point current = path.get(0);
+        path.remove(0);
 
-        Queue<Point> frontier = new PriorityQueue<>();
-        ArrayList<Point> explored = new ArrayList<>();
+        Queue<Point> frontier = new PriorityQueue<>(); //frontier
+        ArrayList<Point> explored = new ArrayList<>(); //explored set
 
         explored.add(current);
 
-        Point next = path.poll();
+        Point next = path.get(0);
 
         while(!path.isEmpty()){
 
             assert current != null;
-            if(current.equals(next))
-                next = path.poll();
+            if(current.equals(next)){
+
+                path.remove(0);
+                next = path.get(0);
+
+            }
 
             Point[] children = current.getNeighbors();
+
 
             for (Point c: children
                  ) {
 
-                if(c == null) continue;
+
+                if(c == null || inExplored(c, explored)) continue;
+
 
                 c.setColor(terrain.getRGB(c.x, c.y)); //terrain level is set here
+                if(c.getTerrainLevel() == 999.9)
+                    continue;
+
 
                 assert next != null;
+                c.setElevation(elevation[c.x][c.y]);
+                double distance = getDistance(current, next);
 
-                double distance = Math.sqrt(Math.pow(next.x - current.x, 2) + Math.pow(next.y - current.y, 2) + Math.pow(next.elevation - current.elevation, 2));
-                //TODO ^ make this neater for debugging
-                double h = distance * current.getTerrainLevel();
-                c.setF(h + distance);
-                if(!explored.contains(c))
+                double h = distance * current.getTerrainLevel(); //f(n) will just be this heuristic?
+
+                c.setF(h);
                 frontier.add(c);
 
             }
@@ -72,13 +83,42 @@ public class lab1 {
             explored.add(current); //add it to explored set
             assert current != null;
             terrain.setRGB(current.x, current.y, 0xFF0000);
+            System.out.println(current);
 
         }
 
         //out png
         File outputFile = new File(outFileName);
+
+
         ImageIO.write(terrain, "png", outputFile);
 
+
+    }
+
+    private static double getDistance(Point current, Point next) {
+        int nextX = next.x;
+        int nextY = next.y;
+        double nextZ = next.elevation;
+
+        int currentX = current.x;
+        int currentY = current.y;
+        double currentZ = current.elevation;
+
+        Double dist =  Math.sqrt(Math.pow(nextX - currentX, 2) + Math.pow(nextY - currentY, 2) + Math.pow(nextZ - currentZ, 2));
+        return  dist;
+    }
+
+    public static boolean inExplored(Point c, ArrayList<Point> explored){
+
+        for (Point e: explored
+        ) {
+
+            if(c.equals(e)) return true;
+
+        }
+
+        return false;
     }
 
     private static void ConfigGraph(BufferedImage terrain, Double[][] elevation, Point[] G) {
@@ -101,17 +141,21 @@ public class lab1 {
         }
     }
 
-    private static void ConfigPath(Scanner s, Queue<Point> path, BufferedImage terrain) {
+    private static void ConfigPath(Scanner s, ArrayList<Point> path, BufferedImage terrain, Double[][] elevation) {
         String ss = s.nextLine();
 
         while(true){
 
             String xString = ss.split("\\s+")[0];
             String yString = ss.split("\\s+")[1];
-            Point p = new Point(Integer.parseInt(xString), Integer.parseInt(yString));
+            int x = Integer.parseInt(xString);
+            int y = Integer.parseInt(yString);
+
+            Point p = new Point(x,y);
             path.add(p);
-            int c = terrain.getRGB(Integer.parseInt(xString), Integer.parseInt(yString));
+            int c = terrain.getRGB(x,y);
             p.setColor(c);
+            p.setElevation(elevation[x][y]);
 
             try{
 
