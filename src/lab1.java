@@ -11,7 +11,7 @@ import java.io.*;
 
 public class lab1 {
 
-    public static void main(String[] args)throws IOException {//terrain.png, mpp.txt, redOut.png
+    public static void main(String[] args) throws IOException {//terrain.png, mpp.txt, redOut.png
 
         BufferedImage terrain = ImageIO.read(new File(args[0]));
         File elevationFile = new File(args[1]);
@@ -43,10 +43,10 @@ public class lab1 {
 
         Point next = path.get(0);
 
-        while(!path.isEmpty()){
+        while (!path.isEmpty()) {
 
             assert current != null;
-            if(current.equals(next)){
+            if (current.equals(next)) {
 
                 path.remove(0);
                 next = path.get(0);
@@ -56,15 +56,15 @@ public class lab1 {
             Point[] children = current.getNeighbors();
 
 
-            for (Point c: children
-                 ) {
+            for (Point c : children
+            ) {
 
 
-                if(c == null || inExplored(c, explored)) continue;
+                if (c == null || inExplored(c, explored)) continue;
 
 
                 c.setColor(terrain.getRGB(c.x, c.y)); //terrain level is set here
-                if(c.getTerrainLevel() == 999.9)
+                if (c.getTerrainLevel() == 999.9)
                     continue;
 
 
@@ -105,16 +105,16 @@ public class lab1 {
         int currentY = current.y;
         double currentZ = current.elevation;
 
-        Double dist =  Math.sqrt(Math.pow(nextX - currentX, 2) + Math.pow(nextY - currentY, 2) + Math.pow(nextZ - currentZ, 2));
-        return  dist;
+        Double dist = Math.sqrt(Math.pow(nextX - currentX, 2) + Math.pow(nextY - currentY, 2) + Math.pow(nextZ - currentZ, 2));
+        return dist;
     }
 
-    public static boolean inExplored(Point c, ArrayList<Point> explored){
+    public static boolean inExplored(Point c, ArrayList<Point> explored) {
 
-        for (Point e: explored
+        for (Point e : explored
         ) {
 
-            if(c.equals(e)) return true;
+            if (c.equals(e)) return true;
 
         }
 
@@ -124,13 +124,13 @@ public class lab1 {
     private static void ConfigGraph(BufferedImage terrain, Double[][] elevation, Point[] G) {
         int count = 0;
 
-        for(int i = 0; i < terrain.getWidth(); i++){
+        for (int i = 0; i < terrain.getWidth(); i++) {
 
-            for(int j = 0; j < terrain.getHeight(); j++){
+            for (int j = 0; j < terrain.getHeight(); j++) {
 
                 Point p = new Point(i, j);
                 p.setElevation(elevation[i][j]);
-                int c = terrain.getRGB(i,j);
+                int c = terrain.getRGB(i, j);
                 p.setColor(c);
 
                 G[count] = p;
@@ -144,24 +144,24 @@ public class lab1 {
     private static void ConfigPath(Scanner s, ArrayList<Point> path, BufferedImage terrain, Double[][] elevation) {
         String ss = s.nextLine();
 
-        while(true){
+        while (true) {
 
             String xString = ss.split("\\s+")[0];
             String yString = ss.split("\\s+")[1];
             int x = Integer.parseInt(xString);
             int y = Integer.parseInt(yString);
 
-            Point p = new Point(x,y);
+            Point p = new Point(x, y);
             path.add(p);
-            int c = terrain.getRGB(x,y);
+            int c = terrain.getRGB(x, y);
             p.setColor(c);
             p.setElevation(elevation[x][y]);
 
-            try{
+            try {
 
                 ss = s.nextLine();
 
-            }catch (NoSuchElementException n){
+            } catch (NoSuchElementException n) {
 
                 break;
 
@@ -171,16 +171,16 @@ public class lab1 {
     }
 
     private static void ConfigElevation(Double[][] elevation, Scanner s) {
-        for(int i = 0; i < 500; i++){
+        for (int i = 0; i < 500; i++) {
 
             String[] line = s.nextLine().trim().split("\\s+");
-            for(int j = 0; j < 395; j++){
+            for (int j = 0; j < 395; j++) {
 
                 String valAsString = line[j].substring(0, 8);
 
                 //remove the e+02 at the end then multiply by 100
 
-                double val = 100.0*Double.parseDouble(valAsString);//primative?
+                double val = 100.0 * Double.parseDouble(valAsString);//primative?
 
                 elevation[j][i] = val;
 
