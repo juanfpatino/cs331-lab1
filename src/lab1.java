@@ -1,10 +1,7 @@
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.NoSuchElementException;
-import java.util.Objects;
-import java.util.Scanner;
+import java.util.*;
 import java.math.*;
 import java.io.*;
 
@@ -26,17 +23,25 @@ public class lab1 {
 
         ConfigElevation(elevation, s);
 
-        ArrayList<Point> path = new ArrayList<>();
+        Queue<Point> path = new PriorityQueue<>();
         s = new Scanner(pathFile);
 
-        ConfigPath(s, path);
+        ConfigPath(s, path, terrain);
 
         Point[] G = new Point[197500];
         ConfigGraph(terrain, elevation, G);
 
         //TODO: A*
 
-        System.out.println("hi");
+        Point starting = path.poll();
+
+        while(!path.isEmpty()){
+
+            Point next = path.poll();
+
+
+
+        }
 
 
     }
@@ -61,7 +66,7 @@ public class lab1 {
         }
     }
 
-    private static void ConfigPath(Scanner s, ArrayList<Point> path) {
+    private static void ConfigPath(Scanner s, Queue<Point> path, BufferedImage terrain) {
         String ss = s.nextLine();
 
         while(true){
@@ -70,6 +75,8 @@ public class lab1 {
             String yString = ss.split("\\s+")[1];
             Point p = new Point(Integer.parseInt(xString), Integer.parseInt(yString));
             path.add(p);
+            int c = terrain.getRGB(Integer.parseInt(xString), Integer.parseInt(yString));
+            p.setColor(c);
 
             try{
 

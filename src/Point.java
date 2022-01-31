@@ -1,11 +1,10 @@
-import java.util.ArrayList;
-
-public class Point {
+public class Point implements Comparable<Point> {
 
     public int x;
     public int y;
     public double elevation;
-    public Color c;
+    private Color color;
+    private double terrainLevel;
 
     public Point(int x, int y){
 
@@ -43,8 +42,73 @@ public class Point {
         int green = (d & 0xff00) >> 8;
         int red = (d & 0xff0000) >> 16;
 
-        this.c = new Color(red,green,blue);
+        this.color = new Color(red,green,blue);
+        this.terrainLevel = setTerrainLevel();
 
     }
+
+    public double setTerrainLevel(){
+
+        if(this.color.equals(new Color(248, 148, 18))){
+
+            return 0.0;// Open land
+
+        }else if(this.color.equals(new Color(255, 192, 0))){
+
+            return 3.0;//Rough meadow
+
+        }else if(this.color.equals(new Color(255, 255, 255))){
+
+            return 1.5;//Easy movement forest
+
+        }else if(this.color.equals(new Color(2, 208, 60))){
+
+            return 3.5;//Slow run forest
+
+        }else if(this.color.equals(new Color(2, 136, 40))){
+
+            return 4.4;//Walk forest
+
+        }else if(this.color.equals(new Color(5, 73, 24))){
+
+            return 10.0;//Impassable vegetation
+
+        }else if(this.color.equals(new Color(0, 0, 255))){
+
+            return 9.0;//Lake/Swamp/Marsh
+
+        }else if(this.color.equals(new Color(71, 51, 3))){
+
+            return 0.0;//Paved road
+
+        }else if(this.color.equals(new Color(0, 0, 0))){
+
+            return 0.0;//Footpath
+
+        }else {
+
+            return 999.9;//out of bounds
+
+        }
+
+    }
+
+    public double getTerrainLevel() {
+        return terrainLevel;
+    }
+
+    @Override
+    public String toString() {
+        return "Point{" +
+                "x=" + x +
+                ", y=" + y +
+                '}';
+    }
+
+    @Override
+    public int compareTo(Point o) {
+        return 0;
+    }
+
 
 }
