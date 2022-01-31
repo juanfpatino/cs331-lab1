@@ -28,9 +28,6 @@ public class lab1 {
 
         ConfigPath(s, path, terrain, elevation);
 
-        Point[] G = new Point[197500];
-        ConfigGraph(terrain, elevation, G);
-
         //A*
 
         Point current = path.get(0);//first stop
@@ -144,26 +141,6 @@ public class lab1 {
         }
 
         return false;
-    }
-
-    private static void ConfigGraph(BufferedImage terrain, Double[][] elevation, Point[] G) {
-        int count = 0;
-
-        for (int i = 0; i < terrain.getWidth(); i++) {
-
-            for (int j = 0; j < terrain.getHeight(); j++) {
-
-                Point p = new Point(i, j);
-                p.setElevation(elevation[i][j]);
-                int c = terrain.getRGB(i, j);
-                p.setColor(c);
-
-                G[count] = p;
-                count++;
-
-            }
-
-        }
     }
 
     private static void ConfigPath(Scanner s, ArrayList<Point> path, BufferedImage terrain, Double[][] elevation) {
