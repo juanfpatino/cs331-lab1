@@ -33,25 +33,17 @@ public class lab1 {
 
         //A*
 
-        Point current = path.get(0);
+        Point current = path.get(0);//first stop
         path.remove(0);
 
         Queue<Point> frontier = new PriorityQueue<>(); //frontier
-        ArrayList<Point> explored = new ArrayList<>(); //explored set
+        LinkedList<Point> explored = new LinkedList<>(); //explored set
 
         explored.add(current);
 
-        Point next = path.get(0);
+        Point next = path.get(0);//second stop
 
         while (!path.isEmpty()) {
-
-            assert current != null;
-            if (current.equals(next)) {
-
-                path.remove(0);
-                next = path.get(0);
-
-            }
 
             Point[] children = current.getNeighbors();
 
@@ -60,7 +52,7 @@ public class lab1 {
             ) {
 
 
-                if (c == null || inExplored(c, explored)) continue;
+                if (c == null || inExplored(c, explored) || frontier.contains(c)) continue;
 
 
                 c.setColor(terrain.getRGB(c.x, c.y)); //terrain level is set here
@@ -75,21 +67,46 @@ public class lab1 {
                 double h = distance * current.getTerrainLevel(); //f(n) will just be this heuristic?
 
                 c.setF(h);
-                frontier.add(c);
+                frontier.add(c); //add child to frontier
 
             }
 
             current = frontier.poll(); //take off frontier
+            assert current != null;     //this is always true anyway. just annoying to see yellow warnings.
+            if (current.equals(next)) {
+
+                path.remove(0);
+                if(path.isEmpty()) break;
+                next = path.get(0);
+
+            }
+
             explored.add(current); //add it to explored set
-            assert current != null;
-            terrain.setRGB(current.x, current.y, 0xFF0000);
             System.out.println(current);
+
+
 
         }
 
         //out png
         File outputFile = new File(outFileName);
 
+        Point p = current;
+        ArrayList<Point> finalPath = new ArrayList<>();
+
+        while (p.getParent() != null) {
+
+            p = p.getParent();
+            finalPath.add(p);
+
+        }
+
+        for (int i = finalPath.size() - 1; i >= 0; i--) {
+
+            terrain.setRGB(finalPath.get(i).x, finalPath.get(i).y, 0xFF0000);
+            System.out.println(finalPath.get(i));
+
+        }
 
         ImageIO.write(terrain, "png", outputFile);
 
@@ -97,7 +114,7 @@ public class lab1 {
     }
 
     private static double getDistance(Point current, Point next) {
-        int nextX = next.x;
+        int nextX = next.x; //difference in elevation is much greater than the difference in horizontal distance, making the heuristic very biased towards the elevation change
         int nextY = next.y;
         double nextZ = next.elevation;
 
@@ -105,16 +122,24 @@ public class lab1 {
         int currentY = current.y;
         double currentZ = current.elevation;
 
-        Double dist = Math.sqrt(Math.pow(nextX - currentX, 2) + Math.pow(nextY - currentY, 2) + Math.pow(nextZ - currentZ, 2));
+        int xDiff = nextX - currentX;
+        int yDiff = nextY - currentY;
+        double zDiff = nextZ - currentZ;
+
+        double X = Math.pow(xDiff, 2);
+        double Y = Math.pow(yDiff, 2);
+        double Z = Math.pow(zDiff, 2);
+
+        Double dist = Math.sqrt(X + Y + Z);
         return dist;
     }
 
-    public static boolean inExplored(Point c, ArrayList<Point> explored) {
+    public static boolean inExplored(Point c, LinkedList<Point> explored) {
 
         for (Point e : explored
         ) {
 
-            if (c.equals(e)) return true;
+            if (e.x == c.x && e.y == c.y) return true; //normal equals() function isn't working
 
         }
 

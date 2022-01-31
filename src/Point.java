@@ -8,6 +8,7 @@ public class Point implements Comparable<Point> {
     private Color color;
     private double terrainLevel;
 
+    private Point parent;
     private double f;
     private int g = 0;
 
@@ -16,6 +17,14 @@ public class Point implements Comparable<Point> {
         this.x = x;
         this.y = y;
 
+    }
+
+    public void setParent(Point parent) {
+        this.parent = parent;
+    }
+
+    public Point getParent() {
+        return parent;
     }
 
     public Point[] getNeighbors() {//returns coordinates* of neighbors. algorithm will ignore negative
@@ -28,7 +37,9 @@ public class Point implements Comparable<Point> {
 
         } else {
 
-            p[0] = new Point(x - 1, y - 1);
+            Point p0 = new Point(x - 1, y - 1);
+            p0.setParent(this);
+            p[0] = p0;
 
         }
         if (y == 0) {
@@ -37,7 +48,9 @@ public class Point implements Comparable<Point> {
 
         } else {
 
-            p[1] = new Point(x, y - 1);
+            Point p1 = new Point(x, y - 1);
+            p1.setParent(this);
+            p[1] = p1;
 
         }
         if (x >= 394 || y == 0) {
@@ -46,7 +59,9 @@ public class Point implements Comparable<Point> {
 
         } else {
 
-            p[2] = new Point(x + 1, y - 1);
+            Point p2 = new Point(x + 1, y - 1);
+            p2.setParent(this);
+            p[2] = p2;
 
         }
         if (x == 0) {
@@ -55,7 +70,9 @@ public class Point implements Comparable<Point> {
 
         } else {
 
-            p[3] = new Point(x - 1, y);
+            Point p3 = new Point(x - 1, y);
+            p3.setParent(this);
+            p[3] = p3;
 
         }
         if (x >= 394) {
@@ -64,7 +81,9 @@ public class Point implements Comparable<Point> {
 
         } else {
 
-            p[4] = new Point(x + 1, y);
+            Point p4 = new Point(x + 1, y);
+            p4.setParent(this);
+            p[4] = p4;
 
         }
         if (x == 0 || y >= 499) {
@@ -73,7 +92,9 @@ public class Point implements Comparable<Point> {
 
         } else {
 
-            p[5] = new Point(x - 1, y + 1);
+            Point p5 = new Point(x - 1, y + 1);
+            p5.setParent(this);
+            p[5] = p5;
 
         }
         if (y >= 499) {
@@ -82,8 +103,9 @@ public class Point implements Comparable<Point> {
 
         } else {
 
-            p[6] = new Point(x, y + 1);
-
+            Point p6 = new Point(x, y + 1);
+            p6.setParent(this);
+            p[6] = p6;
         }
         if (x >= 394 || y >= 499) {
 
@@ -91,7 +113,9 @@ public class Point implements Comparable<Point> {
 
         } else {
 
-            p[7] = new Point(x + 1, y + 1);
+            Point p7 = new Point(x + 1, y + 1);
+            p7.setParent(this);
+            p[7] = p7;
 
         }
 
@@ -188,10 +212,9 @@ public class Point implements Comparable<Point> {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Point point = (Point) o;
-        return x == point.x && y == point.y;
+        return this.x == point.x && this.y == point.y;
     }
 
     @Override
