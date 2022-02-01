@@ -10,7 +10,7 @@ public class Point implements Comparable<Point> {
 
     private Point parent;
     private double f;
-    private int g = 0;
+    private double g = 0.0;
 
     public Point(int x, int y) {
 
@@ -31,7 +31,7 @@ public class Point implements Comparable<Point> {
 
         Point[] p = new Point[8];
 
-        if (x == 0 || y == 0) {
+        if (x == 0 || y == 0) {//southwest
 
             p[0] = null;    //these are to prevent out of bounds
 
@@ -48,7 +48,7 @@ public class Point implements Comparable<Point> {
 
         } else {
 
-            Point p1 = new Point(x, y - 1);
+            Point p1 = new Point(x, y - 1);//south
             p1.setParent(this);
             p[1] = p1;
 
@@ -59,7 +59,7 @@ public class Point implements Comparable<Point> {
 
         } else {
 
-            Point p2 = new Point(x + 1, y - 1);
+            Point p2 = new Point(x + 1, y - 1);//southeast
             p2.setParent(this);
             p[2] = p2;
 
@@ -70,7 +70,7 @@ public class Point implements Comparable<Point> {
 
         } else {
 
-            Point p3 = new Point(x - 1, y);
+            Point p3 = new Point(x - 1, y); //west
             p3.setParent(this);
             p[3] = p3;
 
@@ -81,7 +81,7 @@ public class Point implements Comparable<Point> {
 
         } else {
 
-            Point p4 = new Point(x + 1, y);
+            Point p4 = new Point(x + 1, y);//east
             p4.setParent(this);
             p[4] = p4;
 
@@ -92,7 +92,7 @@ public class Point implements Comparable<Point> {
 
         } else {
 
-            Point p5 = new Point(x - 1, y + 1);
+            Point p5 = new Point(x - 1, y + 1);//northwest
             p5.setParent(this);
             p[5] = p5;
 
@@ -103,7 +103,7 @@ public class Point implements Comparable<Point> {
 
         } else {
 
-            Point p6 = new Point(x, y + 1);
+            Point p6 = new Point(x, y + 1);//north
             p6.setParent(this);
             p[6] = p6;
         }
@@ -113,7 +113,7 @@ public class Point implements Comparable<Point> {
 
         } else {
 
-            Point p7 = new Point(x + 1, y + 1);
+            Point p7 = new Point(x + 1, y + 1);//northeast
             p7.setParent(this);
             p[7] = p7;
 
@@ -131,7 +131,7 @@ public class Point implements Comparable<Point> {
         this.g = g;
     }
 
-    public int getG() {
+    public double getG() {
         return g;
     }
 

@@ -63,7 +63,7 @@ public class lab1 {
 
                 double h = distance * current.getTerrainLevel(); //f(n) will just be this heuristic?
 
-                c.setF(h);
+                c.setF(h + c.getG()); //f(n) = g(n) + h(n)
                 frontier.add(c); //add child to frontier
 
             }
@@ -111,16 +111,16 @@ public class lab1 {
     }
 
     private static double getDistance(Point current, Point next) {
-        int nextX = next.x; //difference in elevation is much greater than the difference in horizontal distance, making the heuristic very biased towards the elevation change
-        int nextY = next.y;
+        double nextX = next.x*10.29; //difference in elevation is much greater than the difference in horizontal distance, making the heuristic very biased towards the elevation change
+        double nextY = next.y*7.55;
         double nextZ = next.elevation;
 
-        int currentX = current.x;
-        int currentY = current.y;
+        double currentX = current.x*10.29;
+        double currentY = current.y*7.55;
         double currentZ = current.elevation;
 
-        int xDiff = nextX - currentX;
-        int yDiff = nextY - currentY;
+        double xDiff = nextX - currentX;
+        double yDiff = nextY - currentY;
         double zDiff = nextZ - currentZ;
 
         double X = Math.pow(xDiff, 2);
