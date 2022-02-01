@@ -33,7 +33,7 @@ public class lab1 {
         Point current = path.get(0);//first stop
         path.remove(0);
 
-        Queue<Point> frontier = new PriorityQueue<>(); //frontier
+        Queue<Point> frontier = new PriorityQueue<>(5,new PointComparator()); //frontier
         LinkedList<Point> explored = new LinkedList<>(); //explored set
 
         explored.add(current);
@@ -44,12 +44,11 @@ public class lab1 {
 
             Point[] children = current.getNeighbors();
 
-
             for (Point c : children
             ) {
 
 
-                if (c == null || inExplored(c, explored) || frontier.contains(c)) continue;
+                if (c == null || inExplored(c, explored)) continue;
 
 
                 c.setColor(terrain.getRGB(c.x, c.y)); //terrain level is set here
@@ -64,7 +63,27 @@ public class lab1 {
                 double h = distance * current.getTerrainLevel(); //f(n) will just be this heuristic?
 
                 c.setF(h + c.getG()); //f(n) = g(n) + h(n)
-                frontier.add(c); //add child to frontier
+
+                if(frontier.contains(c)){
+
+                    ArrayList<Point> arr = new ArrayList<>(frontier);
+
+                    int otherCidx = arr.indexOf(c);
+
+                    if(c.getF() > arr.get(otherCidx).getF()){
+
+                        continue;
+
+                    }//else
+                    frontier.remove(c);
+                    frontier.add(c);
+
+                }
+                else{
+
+                    frontier.add(c); //add child to frontier
+
+                }
 
             }
 
@@ -78,8 +97,10 @@ public class lab1 {
 
             }
 
+            //do i have to hard code this
+            if(!inExplored(current, explored))
             explored.add(current); //add it to explored set
-            System.out.println(current);
+            //System.out.println(current);
 
 
 
@@ -91,6 +112,7 @@ public class lab1 {
         Point p = current;
         ArrayList<Point> finalPath = new ArrayList<>();
 
+        finalPath.add(p);
         while (p.getParent() != null) {
 
             p = p.getParent();
@@ -100,10 +122,22 @@ public class lab1 {
 
         for (int i = finalPath.size() - 1; i >= 0; i--) {
 
-            terrain.setRGB(finalPath.get(i).x, finalPath.get(i).y, 0xFF0000);
+            Point j = finalPath.get(i);
+
+            terrain.setRGB(j.x, j.y, 255);
+            for (Point nei: j.getNeighbors()
+                 ) {
+
+                if(nei == null) continue;
+
+                terrain.setRGB(nei.x, nei.y, 255);
+
+            }
             System.out.println(finalPath.get(i));
 
         }
+
+        System.out.println("Distance climbed: " + finalPath.get(0).getG() + " meters");
 
         ImageIO.write(terrain, "png", outputFile);
 

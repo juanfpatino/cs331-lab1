@@ -1,6 +1,6 @@
 import java.util.Objects;
 
-public class Point implements Comparable<Point> {
+public class Point{
 
     public int x;
     public int y;
@@ -30,6 +30,9 @@ public class Point implements Comparable<Point> {
     public Point[] getNeighbors() {//returns coordinates* of neighbors. algorithm will ignore negative
 
         Point[] p = new Point[8];
+        double horizontalMove = 10.29; //meters
+        double verticalMove = 7.55; //meters
+        double diagonalMove = Math.sqrt(Math.pow(horizontalMove, 2) + Math.pow(verticalMove, 2)); //Pythagoras
 
         if (x == 0 || y == 0) {//southwest
 
@@ -39,6 +42,7 @@ public class Point implements Comparable<Point> {
 
             Point p0 = new Point(x - 1, y - 1);
             p0.setParent(this);
+            p0.setG(this.g + diagonalMove);
             p[0] = p0;
 
         }
@@ -50,6 +54,7 @@ public class Point implements Comparable<Point> {
 
             Point p1 = new Point(x, y - 1);//south
             p1.setParent(this);
+            p1.setG(this.g + verticalMove);
             p[1] = p1;
 
         }
@@ -61,6 +66,7 @@ public class Point implements Comparable<Point> {
 
             Point p2 = new Point(x + 1, y - 1);//southeast
             p2.setParent(this);
+            p2.setG(this.g + diagonalMove);
             p[2] = p2;
 
         }
@@ -72,6 +78,7 @@ public class Point implements Comparable<Point> {
 
             Point p3 = new Point(x - 1, y); //west
             p3.setParent(this);
+            p3.setG(this.g + horizontalMove);
             p[3] = p3;
 
         }
@@ -83,6 +90,7 @@ public class Point implements Comparable<Point> {
 
             Point p4 = new Point(x + 1, y);//east
             p4.setParent(this);
+            p4.setG(this.g + horizontalMove);
             p[4] = p4;
 
         }
@@ -94,6 +102,7 @@ public class Point implements Comparable<Point> {
 
             Point p5 = new Point(x - 1, y + 1);//northwest
             p5.setParent(this);
+            p5.setG(this.g + diagonalMove);
             p[5] = p5;
 
         }
@@ -105,6 +114,7 @@ public class Point implements Comparable<Point> {
 
             Point p6 = new Point(x, y + 1);//north
             p6.setParent(this);
+            p6.setG(this.g + verticalMove);
             p[6] = p6;
         }
         if (x >= 394 || y >= 499) {
@@ -115,6 +125,7 @@ public class Point implements Comparable<Point> {
 
             Point p7 = new Point(x + 1, y + 1);//northeast
             p7.setParent(this);
+            p7.setG(this.g + diagonalMove);
             p[7] = p7;
 
         }
@@ -127,7 +138,11 @@ public class Point implements Comparable<Point> {
         this.f = f;
     }
 
-    public void setG(int g) {
+    public double getF() {
+        return f;
+    }
+
+    public void setG(double g) {
         this.g = g;
     }
 
@@ -214,7 +229,7 @@ public class Point implements Comparable<Point> {
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         Point point = (Point) o;
-        return this.x == point.x && this.y == point.y;
+        return this.x == point.x && this.y == point.y && this.elevation == point.elevation;
     }
 
     @Override
@@ -223,17 +238,4 @@ public class Point implements Comparable<Point> {
     }
 
 
-    @Override
-    public int compareTo(Point o) {
-        if (this.f < o.f) {
-
-            return 1;
-
-        } else if (this.f > o.f) {
-
-            return -1;
-
-        }
-        return 0;
-    }
 }
