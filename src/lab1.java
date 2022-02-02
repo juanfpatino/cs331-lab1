@@ -30,6 +30,48 @@ public class lab1 {
 
         //A*
 
+        Point current = aStar(terrain, elevation, path);
+
+        //out png
+        File outputFile = new File(outFileName);
+
+        Point p = current;
+        ArrayList<Point> finalPath = new ArrayList<>();
+
+        finalPath.add(p);
+        while (p.getParent() != null) {
+
+            p = p.getParent();
+            finalPath.add(p);
+
+        }
+
+        for (int i = finalPath.size() - 1; i >= 0; i--) {
+
+            Point j = finalPath.get(i);
+
+            terrain.setRGB(j.x, j.y, 255);
+
+            for (Point n: j.getNeighbors()
+                 ) {
+
+                if(n == null) continue;
+
+                terrain.setRGB(n.x, n.y, 255);
+
+            }
+
+            //System.out.println(finalPath.get(i));
+
+        }
+
+        System.out.println("Distance climbed: " + finalPath.get(0).getG() + " meters");
+        ImageIO.write(terrain, "png", outputFile);
+
+
+    }
+
+    private static Point aStar(BufferedImage terrain, Double[][] elevation, ArrayList<Point> path) {
         Point current = path.get(0);//first stop
         path.remove(0);
 
@@ -58,12 +100,10 @@ public class lab1 {
 
                 assert next != null;
                 c.setElevation(elevation[c.x][c.y]);
-                double distance = getDistance(current, next);
 
-                double h = distance * current.getTerrainLevel(); //f(n) will just be this heuristic?
+                setHeuristic(current, next, c);
 
-                c.setF(h + c.getG()); //f(n) = g(n) + h(n)
-
+                //add child to frontier
                 if(frontier.contains(c)){
 
                     ArrayList<Point> arr = new ArrayList<>(frontier);
@@ -76,14 +116,9 @@ public class lab1 {
 
                     }//else
                     frontier.remove(c);
-                    frontier.add(c);
 
                 }
-                else{
-
-                    frontier.add(c); //add child to frontier
-
-                }
+                frontier.add(c);
 
             }
 
@@ -105,43 +140,13 @@ public class lab1 {
 
 
         }
+        return current;
+    }
 
-        //out png
-        File outputFile = new File(outFileName);
-
-        Point p = current;
-        ArrayList<Point> finalPath = new ArrayList<>();
-
-        finalPath.add(p);
-        while (p.getParent() != null) {
-
-            p = p.getParent();
-            finalPath.add(p);
-
-        }
-
-        for (int i = finalPath.size() - 1; i >= 0; i--) {
-
-            Point j = finalPath.get(i);
-
-            terrain.setRGB(j.x, j.y, 255);
-            for (Point nei: j.getNeighbors()
-                 ) {
-
-                if(nei == null) continue;
-
-                terrain.setRGB(nei.x, nei.y, 255);
-
-            }
-            System.out.println(finalPath.get(i));
-
-        }
-
-        System.out.println("Distance climbed: " + finalPath.get(0).getG() + " meters");
-
-        ImageIO.write(terrain, "png", outputFile);
-
-
+    private static void setHeuristic(Point current, Point next, Point c) {
+        double distance = getDistance(current, next);
+        double h = distance * current.getTerrainLevel(); //f(n) will just be this heuristic?
+        c.setF(h + c.getG()); //f(n) = g(n) + h(n)
     }
 
     private static double getDistance(Point current, Point next) {
@@ -214,9 +219,13 @@ public class lab1 {
 
                 String valAsString = line[j].substring(0, 8);
 
-                //remove the e+02 at the end then multiply by 100
+                //last two is how many decimal places to move to the right
 
-                double val = 100.0 * Double.parseDouble(valAsString);//primative?
+                String exponent = line[j].substring(11, 13);
+
+                int exp = Integer.parseInt(exponent);
+
+                double val = Math.pow(10, exp) * Double.parseDouble(valAsString);//primative?
 
                 elevation[j][i] = val;
 

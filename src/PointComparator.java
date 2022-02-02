@@ -6,7 +6,6 @@ public class PointComparator implements Comparator<Point> {
 
         return Double.compare(o1.getF(), o2.getF());
 
-
     }
 
     @Override
