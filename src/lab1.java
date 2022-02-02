@@ -130,6 +130,13 @@ public class lab1 {
                 if(path.isEmpty()) break;
                 next = path.get(0);
 
+                //empty frontier queue and explored set. We are doing a completely new A* search to the next point in the path
+                frontier = new PriorityQueue<>(5, new PointComparator());
+                explored = new LinkedList<>();
+                frontier.add(current);
+                explored.add(current);
+                continue;
+
             }
 
             //do i have to hard code this
