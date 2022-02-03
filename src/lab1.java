@@ -53,7 +53,7 @@ public class lab1 {
 
                 if (n == null) continue;
 
-                terrain.setRGB(n.x, n.y, 0xFFFFFF); //red (why are both black?
+                terrain.setRGB(n.x, n.y, 0xFFFFFF); //red (why are both black?)
 
             }
 
