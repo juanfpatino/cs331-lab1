@@ -1,13 +1,9 @@
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.lang.reflect.Array;
 import java.util.*;
-import java.math.*;
 import java.io.*;
 
 //Juan Francisco Patino
-
-//h(n) will be a number averaged by the difference in elevation from g(n) and a number derived from the difficulty of the terrain
 
 public class lab1 {
 
@@ -52,22 +48,19 @@ public class lab1 {
 
             terrain.setRGB(j.x, j.y, 255);
 
-            for (Point n: j.getNeighbors()
-                 ) {
+            for (Point n : j.getNeighbors()
+            ) {
 
-                if(n == null) continue;
+                if (n == null) continue;
 
                 terrain.setRGB(n.x, n.y, 255);
 
             }
 
-            //System.out.println(finalPath.get(i));
-
         }
 
-        System.out.println("Distance climbed: " + finalPath.get(0).getG() + " meters");
+        System.out.println("Total Distance: " + finalPath.get(0).getG() + " meters");
         ImageIO.write(terrain, "png", outputFile);
-
 
     }
 
@@ -75,7 +68,7 @@ public class lab1 {
         Point current = path.get(0);//first stop
         path.remove(0);
 
-        Queue<Point> frontier = new PriorityQueue<>(5,new PointComparator()); //frontier
+        Queue<Point> frontier = new PriorityQueue<>(5, new PointComparator()); //frontier
         LinkedList<Point> explored = new LinkedList<>(); //explored set
 
         explored.add(current);
@@ -97,20 +90,19 @@ public class lab1 {
                 if (c.getTerrainLevel() == 999.9)
                     continue;
 
-
                 assert next != null;
-                c.setElevation(elevation[c.x][c.y]);
+                c.setElevation(elevation[c.x][c.y]); //get the elevation of this pixel from the elevation array[]
 
-                setHeuristic(current, next, c);
+                setHeuristic(current, next, c);//set f(n) for c
 
                 //add child to frontier
-                if(frontier.contains(c)){
+                if (frontier.contains(c)) {
 
                     ArrayList<Point> arr = new ArrayList<>(frontier);
 
                     int otherCidx = arr.indexOf(c);
 
-                    if(c.getF() > arr.get(otherCidx).getF()){
+                    if (c.getF() > arr.get(otherCidx).getF()) {
 
                         continue;
 
@@ -127,7 +119,7 @@ public class lab1 {
             if (current.equals(next)) {
 
                 path.remove(0);
-                if(path.isEmpty()) break;
+                if (path.isEmpty()) break;
                 next = path.get(0);
 
                 //empty frontier queue and explored set. We are doing a completely new A* search to the next point in the path
@@ -139,11 +131,8 @@ public class lab1 {
 
             }
 
-            //do i have to hard code this
-            if(!inExplored(current, explored))
-            explored.add(current); //add it to explored set
-            //System.out.println(current);
-
+            if (!inExplored(current, explored))
+                explored.add(current); //add it to explored set
 
 
         }
@@ -151,18 +140,19 @@ public class lab1 {
     }
 
     private static void setHeuristic(Point current, Point next, Point c) {
-        double distance = getDistance(current, next);
-        double h = distance * current.getTerrainLevel(); //f(n) will just be this heuristic?
+        double distance = getDistance(c, next);
+        double h = distance * current.getTerrainLevel();
         c.setF(h + c.getG()); //f(n) = g(n) + h(n)
     }
 
     private static double getDistance(Point current, Point next) {
-        double nextX = next.x*10.29; //difference in elevation is much greater than the difference in horizontal distance, making the heuristic very biased towards the elevation change
-        double nextY = next.y*7.55;
+
+        double nextX = next.x * 10.29;
+        double nextY = next.y * 7.55;
         double nextZ = next.elevation;
 
-        double currentX = current.x*10.29;
-        double currentY = current.y*7.55;
+        double currentX = current.x * 10.29;
+        double currentY = current.y * 7.55;
         double currentZ = current.elevation;
 
         double xDiff = nextX - currentX;
@@ -232,7 +222,7 @@ public class lab1 {
 
                 int exp = Integer.parseInt(exponent);
 
-                double val = Math.pow(10, exp) * Double.parseDouble(valAsString);//primative?
+                double val = Math.pow(10, exp) * Double.parseDouble(valAsString);
 
                 elevation[j][i] = val;
 

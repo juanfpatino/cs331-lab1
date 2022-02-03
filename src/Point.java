@@ -1,6 +1,6 @@
 import java.util.Objects;
 
-public class Point{
+public class Point {
 
     public int x;
     public int y;
@@ -179,7 +179,7 @@ public class Point{
 
         } else if (this.color.equals(new Color(255, 255, 255))) {
 
-            return 1.5;//Easy movement forest
+            return 0.1;//Easy movement forest
 
         } else if (this.color.equals(new Color(2, 208, 60))) {
 
@@ -203,7 +203,7 @@ public class Point{
 
         } else if (this.color.equals(new Color(0, 0, 0))) {
 
-            return 0.1;//Footpath
+            return 0.25;//Footpath
 
         } else {
 
