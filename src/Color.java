@@ -1,5 +1,6 @@
 import java.util.Objects;
 
+//Simple representation of a color
 public class Color {
 
     public int r;

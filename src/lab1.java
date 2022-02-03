@@ -46,14 +46,14 @@ public class lab1 {
 
             Point j = finalPath.get(i);
 
-            terrain.setRGB(j.x, j.y, 255);
+            terrain.setRGB(j.x, j.y, 0xFFC0CB); //pink
 
             for (Point n : j.getNeighbors()
             ) {
 
                 if (n == null) continue;
 
-                terrain.setRGB(n.x, n.y, 255);
+                terrain.setRGB(n.x, n.y, 0xFFFFFF); //red (why are both black?
 
             }
 
@@ -64,6 +64,7 @@ public class lab1 {
 
     }
 
+    //A* algorithm
     private static Point aStar(BufferedImage terrain, Double[][] elevation, ArrayList<Point> path) {
         Point current = path.get(0);//first stop
         path.remove(0);
@@ -139,12 +140,14 @@ public class lab1 {
         return current;
     }
 
+    //h(n) = distance * terrain level. f(n) = g(n) + h(n)
     private static void setHeuristic(Point current, Point next, Point c) {
         double distance = getDistance(c, next);
         double h = distance * current.getTerrainLevel();
         c.setF(h + c.getG()); //f(n) = g(n) + h(n)
     }
 
+    //Returns the distance from this point to the next point in the path
     private static double getDistance(Point current, Point next) {
 
         double nextX = next.x * 10.29;
@@ -163,22 +166,23 @@ public class lab1 {
         double Y = Math.pow(yDiff, 2);
         double Z = Math.pow(zDiff, 2);
 
-        Double dist = Math.sqrt(X + Y + Z);
-        return dist;
+        return Math.sqrt(X + Y + Z);
     }
 
+    //Normal equals() function wasn't working for some reason (I did change equals() in Point.java)
     public static boolean inExplored(Point c, LinkedList<Point> explored) {
 
         for (Point e : explored
         ) {
 
-            if (e.x == c.x && e.y == c.y) return true; //normal equals() function isn't working
+            if (e.x == c.x && e.y == c.y) return true;
 
         }
 
         return false;
     }
 
+    //Configure the path based on the path file.
     private static void ConfigPath(Scanner s, ArrayList<Point> path, BufferedImage terrain, Double[][] elevation) {
         String ss = s.nextLine();
 
@@ -208,6 +212,7 @@ public class lab1 {
         }
     }
 
+    //Create a 2D array representing the height of each point on the terrain
     private static void ConfigElevation(Double[][] elevation, Scanner s) {
         for (int i = 0; i < 500; i++) {
 

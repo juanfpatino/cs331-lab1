@@ -1,5 +1,6 @@
 import java.util.Objects;
 
+//Represents a pixel in the image
 public class Point {
 
     public int x;
@@ -27,7 +28,8 @@ public class Point {
         return parent;
     }
 
-    public Point[] getNeighbors() {//returns coordinates* of neighbors. algorithm will ignore negative
+    //Return coordinates* of neighbors. algorithm will ignore negative
+    public Point[] getNeighbors() {
 
         Point[] p = new Point[8];
         double horizontalMove = 10.29; //meters
